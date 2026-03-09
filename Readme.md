@@ -1,38 +1,26 @@
-🚀# Projeto JMS com Spring Boot e ActiveMQ
-Este mini projeto demonstra a implementação de uma arquitetura de mensageria assíncrona utilizando o padrão JMS (Java Message Service). O objetivo principal é permitir a comunicação desacoplada entre diferentes partes de um sistema, garantindo que o processamento de pedidos não bloqueie a experiência do usuário.
+# 🚀 JMS Training Project - Spring Boot & ActiveMQ
 
-🛠️ Tecnologias Utilizadas
-Java 17+: Linguagem base.
+Este projeto é um guia prático para entender a comunicação assíncrona entre sistemas utilizando **JMS (Java Message Service)** e o broker **ActiveMQ Classic**.
 
-Spring Boot 4.0.3: Framework para facilitar a configuração e o gerenciamento de componentes (Beans).
+O objetivo é demonstrar como um sistema pode enviar mensagens para uma fila (Queue) de forma desacoplada, garantindo que o processamento de dados ocorra em segundo plano.
 
-JMS (Jakarta Messaging): API padrão para troca de mensagens.
 
-ActiveMQ Classic (Docker): O Message Broker responsável por receber, armazenar e entregar as mensagens.
 
-Maven: Gerenciador de dependências.
+## 🛠️ Tecnologias e Ferramentas
+* **Java 17**
+* **Spring Boot 3.x / 4.x**
+* **ActiveMQ Classic 5.19+** (via Docker)
+* **Maven**
 
-🏗️ Arquitetura do Sistema
-O projeto segue o modelo Ponto-a-Ponto (Queue), onde cada mensagem enviada para a fila é processada por exatamente um consumidor.
+## 🏗️ Estrutura do Projeto
+O projeto demonstra o fluxo **Ponto-a-Ponto (P2P)**:
+1. **Producer (`PedidoPublisher`)**: Envia mensagens de texto/JSON para o broker.
+2. **Broker (ActiveMQ)**: Servidor intermediário que armazena as mensagens.
+3. **Consumer (`PedidoReceiver`)**: Escuta a fila assincronamente via `@JmsListener`.
 
-Producer (Produtor): Através de um endpoint REST ou serviço interno, o sistema utiliza o JmsTemplate do Spring para enviar dados para a fila fila.pedidos.
+## 🚀 Como Iniciar o Broker (ActiveMQ)
 
-Message Broker (ActiveMQ): Atua como o servidor intermediário, mantendo a mensagem segura em uma fila até que o consumidor esteja pronto.
+Execute o comando abaixo para subir o servidor com a porta de dados (`61616`) e o console web (`8161`):
 
-Consumer (Consumidor): Utiliza a anotação @JmsListener para "escutar" a fila de forma assíncrona. Assim que uma mensagem chega, ela é processada automaticamente em uma thread separada.
-
-🌟 Principais Benefícios Demonstrados
-Desacoplamento: O produtor não precisa saber quem é o consumidor ou se ele está online no momento do envio.
-
-Escalabilidade: Se a demanda aumentar, podemos subir várias instâncias do consumidor para ler a mesma fila.
-
-Resiliência: Se o consumidor falhar, a mensagem permanece no ActiveMQ para ser reprocessada mais tarde.
-
-📝 Fluxo de Funcionamento
-O Broker é iniciado via Docker na porta 61616.
-
-A aplicação Spring Boot se conecta ao Broker usando as credenciais definidas em application.properties.
-
-Um componente envia uma mensagem de texto (ex: "Pedido #123").
-
-O componente @JmsListener detecta a nova mensagem e imprime: <<< Mensagem recebida da fila: Pedido #123.
+```bash
+docker run -d -p 8161:8161 -p 61616:61616 apache/activemq-classic:5.19.2
