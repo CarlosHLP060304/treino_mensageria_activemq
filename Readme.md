@@ -1,4 +1,4 @@
-🚀 Projeto JMS com Spring Boot e ActiveMQ
+🚀# Projeto JMS com Spring Boot e ActiveMQ
 Este mini projeto demonstra a implementação de uma arquitetura de mensageria assíncrona utilizando o padrão JMS (Java Message Service). O objetivo principal é permitir a comunicação desacoplada entre diferentes partes de um sistema, garantindo que o processamento de pedidos não bloqueie a experiência do usuário.
 
 🛠️ Tecnologias Utilizadas
